@@ -153,7 +153,7 @@ Planar.Entity = class {
 		var [ keys, handler ] = args,
 			[ handlers ] = args;
 
-		if ( typeof constructor === 'string' ) {
+		if ( typeof keys === 'string' ) {
 			keys = [keys];
 		}
 		if ( Array.isArray( keys ) && typeof handler === 'function' ) {
