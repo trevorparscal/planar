@@ -1,0 +1,24 @@
+{
+  "author": "Trevor Parscal <trevorparscal@gmail.com>",
+  "license": "MIT",
+  "name": "planar",
+  "version": "1.0.0",
+  "description": "ES6 Game Engine",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-iife": "^0.3.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-order": "^1.1.1",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-uglify": "^2.1.0",
+    "jshint": "^2.9.4",
+    "pump": "^1.0.2",
+    "uglify-js-harmony": "^2.7.5"
+  },
+  "devDependencies": {}
+}
