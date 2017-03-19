@@ -10,10 +10,40 @@ Planar.Entity = class {
 	 * @constructor
 	 */
 	constructor() {
+		this.scene = null;
 		this.iteration = 0;
 		this.components = {};
 		this.changed = {};
 		this.key = this.constructor.count++;
+	}
+
+	/**
+	 * Attach entity to an scene.
+	 *
+	 * @param {Planar.Scene} scene Scene to attach to
+	 * @throws {Error} If already attached to an app
+	 * @chainable
+	 */
+	attach( scene ) {
+		if ( this.scene ) {
+			throw new Error( 'Already attached to a scene.' );
+		}
+		this.scene = scene;
+		return this;
+	}
+
+	/**
+	 * Detach entity from the scene.
+	 *
+	 * @throws {Error} If not attached to an app
+	 * @chainable
+	 */
+	detach() {
+		if ( !this.scene ) {
+			throw new Error( 'Not attached to an scene.' );
+		}
+		this.scene = null;
+		return this;
 	}
 
 	/**
@@ -155,6 +185,7 @@ Planar.Entity = class {
 	 *
 	 * @param {Object.<string,Object>} components List of components to add as
 	 *   component-key/initial-state pairs
+	 * @chainable
 	 */
 	add( components ) {
 		for ( let key in components ) {
@@ -162,6 +193,10 @@ Planar.Entity = class {
 			this.components[key] = component;
 			this.changed[key] = this.iteration;
 		}
+		if ( this.scene ) {
+			this.scene.reconcile( this );
+		}
+		return this;
 	}
 
 	/**
@@ -174,6 +209,9 @@ Planar.Entity = class {
 		for ( let key of keys ) {
 			delete this.components[key];
 			delete this.changed[key];
+		}
+		if ( this.scene ) {
+			this.scene.reconcile( this );
 		}
 		return this;
 	}
