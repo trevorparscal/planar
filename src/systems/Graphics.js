@@ -58,13 +58,10 @@ Planar.System.Graphics = class extends Planar.System {
 			const graphic = this.graphics.get( entity.key );
 			entity.handle( [ 'shape', 'draw' ], ( shape, draw ) => {
 				graphic.clear();
-				switch ( shape.type ) {
-					case 'circle':
-						drawCircle( graphic, shape.radius, draw );
-						break;
-					default:
-						drawPolygon( graphic, shape.points, draw );
-						break;
+				if ( shape.type === 'circle' ) {
+					drawCircle( graphic, shape.radius, draw );
+				} else {
+					drawPolygon( graphic, shape.points, draw );
 				}
 			} );
 			entity.handle( {
