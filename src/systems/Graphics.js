@@ -82,7 +82,6 @@ Planar.System.Graphics = class extends Planar.System {
 };
 
 function drawCircle( graphic, radius, draw ) {
-	const pixiPoints = [];
 	if ( draw.fillAlpha ) {
 		graphic.beginFill( draw.fillColor, draw.fillAlpha );
 	}
