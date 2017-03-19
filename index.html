@@ -41,7 +41,7 @@
 						{ type: 'circle', radius: size / 2 },
 						{ type: 'ngon', radius: size / 2, sides: 3 },
 						{ type: 'ngon', radius: size / 2, sides: 5 }
-					][Math.round( Math.random() * 2 )],
+					][Math.round( Math.random() * 3 )],
 					draw: {
 						fillColor: player ? 0x00CCEE : PIXI.utils.rgb2hex( [
 							0.2 + Math.random() * 0.75,
@@ -71,7 +71,7 @@
 				var platform = new Planar.Entity();
 				platform.add( {
 					shape: { type: 'rectangle', width: width, height: height },
-					draw: { fillColor: 0xFF0000 },
+					draw: { fillColor: 0x444444 },
 					transform: { position: new Planar.Point( x, y ) },
 					motion: { isStatic: true },
 					material: {}
