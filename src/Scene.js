@@ -101,21 +101,23 @@ Planar.Scene = class {
 	 *
 	 * Adds entity to the addition queue, removing it from the deletion queue if present.
 	 *
-	 * @param {Object} entity Entity to add to addition queue
+	 * @param {...Planar.Entities} entities Entities enqueue for addition
 	 * @throws {Error} If entity has already exists
 	 * @throws {Error} If entity has already been added to addition queue
 	 * @chainable
 	 */
-	add( entity ) {
-		if ( this.deletions.has( entity ) ) {
-			this.deletions.delete( entity );
-		} else if ( this.entities.has( entity ) ) {
-			throw new Error( `"${entity.key}" already exists.` );
+	add( ...entities ) {
+		for ( let entity of entities ) {
+			if ( this.deletions.has( entity ) ) {
+				this.deletions.delete( entity );
+			} else if ( this.entities.has( entity ) ) {
+				throw new Error( `"${entity.key}" already exists.` );
+			}
+			if ( this.additions.has( entity ) ) {
+				throw new Error( `"${entity.key}" has already been added to addition queue.` );
+			}
+			this.additions.add( entity );
 		}
-		if ( this.additions.has( entity ) ) {
-			throw new Error( `"${entity.key}" has already been added to addition queue.` );
-		}
-		this.additions.add( entity );
 		return this;
 	}
 
@@ -124,22 +126,24 @@ Planar.Scene = class {
 	 *
 	 * Adds entity to the deletion queue, removing it from the addition queue if present.
 	 *
-	 * @param {Object} entity Entity to add to deletion queue
+	 * @param {...Planar.Entities} entities Entities enqueue for deletion
 	 * @throws {Error} If entity has already been added to deletion queue
 	 * @throws {Error} If entity key doesn't exist
 	 * @chainable
 	 */
-	delete( entity ) {
-		if ( this.deletions.has( entity ) ) {
-			throw new Error( `"${entity.key}" has already been added to deletion queue.` );
+	delete( ...entities ) {
+		for ( let entity of entities ) {
+			if ( this.deletions.has( entity ) ) {
+				throw new Error( `"${entity.key}" has already been added to deletion queue.` );
+			}
+			if ( !entity ) {
+				throw new Error( `"${entity.key}" doesn't exist.` );
+			}
+			if ( this.additions.has( entity ) ) {
+				this.additions.delete( entity );
+			}
+			this.deletions.add( entity );
 		}
-		if ( !entity ) {
-			throw new Error( `"${entity.key}" doesn't exist.` );
-		}
-		if ( this.additions.has( entity ) ) {
-			this.additions.delete( entity );
-		}
-		this.deletions.add( entity );
 		return this;
 	}
 

@@ -36,12 +36,14 @@ Planar.App = class {
 	 *
 	 * Attaches scene and adds it to the scenes list.
 	 *
-	 * @param {Planar.Scene} scene Scene to add
+	 * @param {...Planar.Scene} scenes Scenes to add
 	 * @chainable
 	 */
-	add( scene ) {
-		this.scenes.add( scene );
-		scene.attach( this );
+	add( ...scenes ) {
+		for ( let scene of scenes ) {
+			this.scenes.add( scene );
+			scene.attach( this );
+		}
 		return this;
 	}
 
@@ -50,12 +52,14 @@ Planar.App = class {
 	 *
 	 * Detaches scene and removes it from the scenes list.
 	 *
-	 * @param {Planar.Scene} scene Scene to delete
+	 * @param {...Planar.Scene} scenes Scenes to delete
 	 * @chainable
 	 */
-	delete( scene ) {
-		scene.detach();
-		this.scenes.delete( scene );
+	delete( ...scenes ) {
+		for ( let scene of scenes ) {
+			scene.detach();
+			this.scenes.delete( scene );
+		}
 		return this;
 	}
 
