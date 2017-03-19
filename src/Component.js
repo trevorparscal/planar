@@ -177,8 +177,19 @@ Planar.Component.define( {
 		width: [ Number, 0 ],
 		height: [ Number, 0 ],
 		points: [ Array, [] ],
-		signature: function () {
-			return this.type + this.points.length;
+		hash: function () {
+			switch ( this.type ) {
+				case 'rectangle':
+					return 'r:' + this.width + ',' + this.height;
+				case 'circle':
+					return 'c:' + this.radius;
+				case 'ngon':
+					return 'n:' + this.radius + ',' + this.sides;
+				case 'polygon':
+					return 'p:' + this.points.length;
+				default:
+					throw new Error( `"${shape.type}" shape type is invalid.` );
+			}
 		}
 	},
 	/**

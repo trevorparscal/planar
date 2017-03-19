@@ -5,6 +5,16 @@
  */
 Planar.System.Geometry = class extends Planar.System {
 	/**
+	 * Create geometry system.
+	 *
+	 * @constructor
+	 */
+	constructor() {
+		super();
+		this.hashes = new Map();
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	isRelated( entity ) {
@@ -15,8 +25,16 @@ Planar.System.Geometry = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	add( entity ) {
-		super.add( entity );
-		entity.change( { shape: createPoints } );
+		const { shape } = entity.components;
+		this.hashes.set( entity.key, shape.hash );
+		entity.change( { shape: createPoints( shape ) } );
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	delete( entity ) {
+		this.hashes.delete( entity.key );
 	}
 
 	/**
@@ -25,8 +43,8 @@ Planar.System.Geometry = class extends Planar.System {
 	update( delta ) {
 		/*jshint loopfunc: true */
 		for ( let entity of this.entities ) {
-			entity.handle( {
-				shape: ( shape ) => {
+			entity.handle( 'shape', ( shape ) => {
+				if ( shape.hash !== this.hashes.get( entity.key ) ) {
 					entity.change( { shape: createPoints } );
 				}
 			} );

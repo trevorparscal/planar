@@ -16,7 +16,7 @@ Planar.System.Physics = class extends Planar.System {
 		this.engine = Matter.Engine.create( { enableSleep: enableSleep } );
 		this.world = this.engine.world;
 		this.bodies = new Map();
-		this.signatures = new Map();
+		this.lengths = new Map();
 	}
 
 	/**
@@ -33,7 +33,7 @@ Planar.System.Physics = class extends Planar.System {
 		super.add( entity );
 		const body = createBody( entity );
 		this.bodies.set( entity.key, body );
-		this.signatures.set( entity.key, entity.components.shape.signature );
+		this.lengths.set( entity.key, entity.components.shape.points.length );
 		Matter.World.add( this.world, body );
 	}
 
@@ -44,7 +44,7 @@ Planar.System.Physics = class extends Planar.System {
 		super.delete( entity );
 		const body = this.bodies.get( entity.key );
 		this.bodies.delete( entity.key );
-		this.signatures.delete( entity.key );
+		this.lengths.delete( entity.key );
 		Matter.World.remove( this.world, body );
 	}
 
@@ -56,12 +56,12 @@ Planar.System.Physics = class extends Planar.System {
 		for ( let entity of this.entities ) {
 			let body = this.bodies.get( entity.key );
 			entity.handle( [ 'shape', 'warp' ], ( shape, warp ) => {
-				if ( shape.signature !== this.signatures.get( entity.key ) ) {
+				if ( shape.points.length !== this.lengths.get( entity.key ) ) {
 					// Replace body
 					Matter.World.remove( this.world, body );
 					body = createBody( entity );
 					this.bodies.set( entity.key, body );
-					this.signatures.set( entity.key, shape.signature );
+					this.lengths.set( entity.key, shape.points.length );
 					Matter.World.add( this.world, body );
 				} else {
 					updateBody( entity, body );
