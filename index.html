@@ -1,0 +1,83 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>(Loading)</title>
+		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="lib/pixi.js"></script>
+		<script src="lib/decomp.js"></script>
+		<script src="lib/matter.js"></script>
+		<script src="lib/stats.js"></script>
+		<script src="dist/planar.js"></script>
+		<script type="text/javascript">
+			var app = new Planar.App(
+				new Planar.System.Player(),
+				new Planar.System.Animation(),
+				new Planar.System.Geometry(),
+				new Planar.System.Physics(),
+				new Planar.System.Graphics(),
+				new Planar.System.Stats()
+			);
+
+			function addShape( x, y, size, player ) {
+				var shape = new Planar.Entity( app );
+				if ( player ) {
+					shape.add( { 'player': {} } );
+				}
+				shape.add( {
+					animation: {},
+					shape: {
+						type: ['rectangle', 'circle', 'ngon'][Math.round( Math.random() * 2 )],
+						radius: size / 2,
+						sides: 3,
+						width: size,
+						height: size
+					},
+					draw: {
+						fillColor: player ? 0x00CCEE : Math.round( Math.random() * Number.MAX_SAFE_INTEGER )
+					},
+					transform: {
+						position: new Planar.Point( x, y ),
+						rotation: Math.random() * ( Math.PI / 2 )
+					},
+					warp: {
+						//scale: new Planar.Point( 0.5 + Math.random() * 2, 0.5 + Math.random() * 2 )
+					},
+					motion: {},
+					material: {}
+				} );
+				app.add( shape );
+			}
+
+			function addPlatform( x, y, width, height ) {
+				var platform = new Planar.Entity( app );
+				platform.add( {
+					shape: { type: 'rectangle', width: width, height: height },
+					draw: { fillColor: 0xFF0000 },
+					transform: { position: new Planar.Point( x, y ) },
+					motion: { isStatic: true },
+					material: {}
+				} );
+				app.add( platform );
+			}
+
+			for ( let i = 0; i < 10; i++ ) {
+				addShape( 128 + 32 * i, 96, 32, i === 1 );
+			}
+			addPlatform( 256, 32, 512, 64 );
+			addPlatform( 256, 480, 512, 64 );
+			addPlatform( 32, 224, 64, 448 );
+			addPlatform( 480, 224, 64, 448 );
+
+			app.start();
+		</script>
+	</body>
+</html>
