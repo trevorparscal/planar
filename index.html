@@ -27,6 +27,8 @@
 				new Planar.System.Stats()
 			);
 
+			var scene = new Planar.Scene();
+
 			function addShape( x, y, size, player ) {
 				var shape = new Planar.Entity( app );
 				if ( player ) {
@@ -54,7 +56,7 @@
 					motion: {},
 					material: {}
 				} );
-				app.add( shape );
+				scene.add( shape );
 			}
 
 			function addPlatform( x, y, width, height ) {
@@ -66,7 +68,7 @@
 					motion: { isStatic: true },
 					material: {}
 				} );
-				app.add( platform );
+				scene.add( platform );
 			}
 
 			for ( let i = 0; i < 10; i++ ) {
@@ -76,6 +78,8 @@
 			addPlatform( 256, 480, 512, 64 );
 			addPlatform( 32, 224, 64, 448 );
 			addPlatform( 480, 224, 64, 448 );
+
+			app.add( scene );
 
 			app.start();
 		</script>

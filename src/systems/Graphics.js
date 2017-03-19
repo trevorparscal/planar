@@ -4,18 +4,34 @@
  * @class
  */
 Planar.System.Graphics = class extends Planar.System {
-	constructor() {
+	/**
+	 * Create graphics system.
+	 *
+	 * @constructor
+	 * @param {Object} options Initialization options
+	 * @param {number} options.width Viewport width
+	 * @param {number} options.height Viewport height
+	 * @param {number} options.transparent Transparent background
+	 * @param {number} options.antialias Anialias rendering
+	 */
+	constructor( { width = 512, height = 512, transparent = false, antialias = false } = {} ) {
 		super();
-		this.renderer = PIXI.autoDetectRenderer( 512, 512, false, true );
+		this.renderer = PIXI.autoDetectRenderer( width, height, transparent, antialias );
 		this.stage = new PIXI.Container();
 		this.graphics = new Map();
 		document.body.appendChild( this.renderer.view );
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	isRelated( entity ) {
 		return entity.has( 'draw', 'shape', 'transform' );
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	add( entity ) {
 		super.add( entity );
 		const graphic = new PIXI.Graphics();
@@ -23,6 +39,9 @@ Planar.System.Graphics = class extends Planar.System {
 		this.stage.addChild( graphic );
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	delete( entity ) {
 		super.delete( entity );
 		const graphic = this.graphics.get( entity.key );
@@ -30,6 +49,9 @@ Planar.System.Graphics = class extends Planar.System {
 		this.stage.removeChild( graphic );
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	update( delta ) {
 		/*jshint loopfunc: true */
 		for ( let entity of this.entities ) {

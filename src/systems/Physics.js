@@ -5,11 +5,15 @@
  */
 Planar.System.Physics = class extends Planar.System {
 	/**
-	 * @inheritdoc
+	 * Create graphics system.
+	 *
+	 * @constructor
+	 * @param {Object} options Initialization options
+	 * @param {number} options.enableSleep Allow bodies to fall asleep when they stop moving
 	 */
-	constructor() {
+	constructor( { enableSleep = true } = {} ) {
 		super();
-		this.engine = Matter.Engine.create( { enableSleep: true } );
+		this.engine = Matter.Engine.create( { enableSleep: enableSleep } );
 		this.world = this.engine.world;
 		this.bodies = new Map();
 		this.signatures = new Map();

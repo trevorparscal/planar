@@ -7,7 +7,7 @@
 	var app = new Planar.App(
 		new Planar.System.Geometry(),
 		new Planar.System.Physics(),
-		new Planar.System.Graphics()
+		new Planar.System.Graphics( { width: 512, height: 512 } )
 	);
 
 	var shape = new Planar.Entity( app );
