@@ -188,7 +188,7 @@ Planar.Component.define( {
 				case 'polygon':
 					return 'p:' + this.points.length;
 				default:
-					throw new Error( `"${shape.type}" shape type is invalid.` );
+					throw new Error( `"${this.type}" shape type is invalid.` );
 			}
 		}
 	},
