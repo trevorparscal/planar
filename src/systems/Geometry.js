@@ -25,6 +25,7 @@ Planar.System.Geometry = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	add( entity ) {
+		super.add( entity );
 		const { shape } = entity.components;
 		this.hashes.set( entity.key, shape.hash );
 		entity.change( { shape: createPoints( shape ) } );
@@ -34,6 +35,7 @@ Planar.System.Geometry = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	delete( entity ) {
+		super.add( entity );
 		this.hashes.delete( entity.key );
 	}
 
