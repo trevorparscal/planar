@@ -16,7 +16,7 @@ Planar.System.Animation = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	isRelated( entity ) {
-		return entity.has( 'animation' );
+		return entity.has( 'animation', 'shape' );
 	}
 
 	/**
