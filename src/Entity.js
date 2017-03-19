@@ -179,6 +179,14 @@ Planar.Entity = class {
 	}
 
 	/**
+	 * Delete all components.
+	 * @return {[type]} [description]
+	 */
+	clear() {
+		this.remove( Object.keys( this.components ) );
+	}
+
+	/**
 	 * Get a collection of components.
 	 *
 	 * @param {...string} [keys] Component keys to select
