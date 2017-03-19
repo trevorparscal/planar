@@ -87,7 +87,7 @@ Planar.App = class {
 		if ( !this.running ) {
 			this.running = true;
 			this.then = performance.now();
-			this.loop( this.then );
+			this.loop();
 			document.title = '(Running)';
 		}
 		return this;
@@ -114,9 +114,9 @@ Planar.App = class {
 	 * Looping will continue running until #running is set to false.
 	 *
 	 * @private
-	 * @param {DOMHighResTimeStamp} timestamp Current time
 	 */
-	loop( now ) {
+	loop() {
+		let now = performance.now();
 		if ( this.running ) {
 			let delta = Math.min( now - this.then, 200 );
 			this.then = now;
