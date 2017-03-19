@@ -8,10 +8,8 @@ Planar.Entity = class {
 	 * Create an entity.
 	 *
 	 * @constructor
-	 * @param {Planar.App} app Application entity is being added to
 	 */
-	constructor( app ) {
-		this.app = app;
+	constructor() {
 		this.iteration = 0;
 		this.components = {};
 		this.changed = {};
@@ -39,7 +37,7 @@ Planar.Entity = class {
 	/**
 	 * Change properties of components.
 	 *
-	 * If the app is in debug mode, changes will be checked against the components' schema.
+	 * If the running in debug mode, changes will be checked against the components' schema.
 	 *
 	 * @param {Object.<string,ComponentChangeCallback|Object>} changers Changer callbacks or lists
 	 *   of property changes, keyed by componenent key, will be skipped if component does not exist
@@ -67,7 +65,7 @@ Planar.Entity = class {
 				}
 				this.changed[key] = iteration;
 			}
-			if ( this.app.debug ) {
+			if ( Planar.debug ) {
 				let schema = component.constructor.schema;
 				for ( let property in component ) {
 					let definition = schema[property];

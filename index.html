@@ -30,7 +30,7 @@
 			var scene = new Planar.Scene();
 
 			function addShape( x, y, size, player ) {
-				var shape = new Planar.Entity( app );
+				var shape = new Planar.Entity();
 				if ( player ) {
 					shape.add( { 'player': {} } );
 				}
@@ -60,7 +60,7 @@
 			}
 
 			function addPlatform( x, y, width, height ) {
-				var platform = new Planar.Entity( app );
+				var platform = new Planar.Entity();
 				platform.add( {
 					shape: { type: 'rectangle', width: width, height: height },
 					draw: { fillColor: 0xFF0000 },

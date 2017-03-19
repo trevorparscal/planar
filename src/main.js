@@ -4,4 +4,6 @@
  * @namespace
  * @type {Object}
  */
-window.Planar = {};
+window.Planar = {
+	debug: true
+};
