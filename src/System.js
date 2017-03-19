@@ -42,6 +42,13 @@ Planar.System = class {
 	}
 
 	/**
+	 * Clear all entities.
+	 */
+	clear() {
+		this.entities.forEach( this.delete, this );
+	}
+
+	/**
 	 * Check if an entity exists.
 	 *
 	 * @param {Planar.Entity} entity Entity to check for.

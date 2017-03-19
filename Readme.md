@@ -10,6 +10,8 @@
 		new Planar.System.Graphics( { width: 512, height: 512 } )
 	);
 
+	var scene = new Planar.Scene();
+
 	var shape = new Planar.Entity( app );
 	shape.add( {
 		shape: { type: 'circle', radius: 32, },
@@ -18,7 +20,7 @@
 		motion: {},
 		material: {}
 	} );
-	app.add( shape );
+	scene.add( shape );
 
 	var platform = new Planar.Entity( app );
 	platform.add( {
@@ -28,6 +30,8 @@
 		motion: { isStatic: true },
 		material: {}
 	} );
-	app.add( platform );
+	scene.add( platform );
+
+	app.add( scene );
 
 	app.start();

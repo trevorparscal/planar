@@ -13,11 +13,8 @@ Planar.App = class {
 	constructor( ...systems ) {
 		// Properties
 		this.running = false;
-		this.iteration = 0;
 		this.systems = new Set();
-		this.entities = new Set();
-		this.additions = new Set();
-		this.deletions = new Set();
+		this.scenes = new Set();
 		this.then = null;
 		this.request = null;
 		this.debug = true;
@@ -35,95 +32,45 @@ Planar.App = class {
 	}
 
 	/**
-	 * Flush queued additions and deletions.
+	 * Add a scene.
 	 *
-	 * Adds entities queued for addition calling #sync for each of them after they are added,
-	 * deletes entities queued for deletion calling #drop for each of them after they are deleted
-	 * and clears the addition and deletion queues.
+	 * Attaches scene and adds it to the scenes list.
 	 *
+	 * @param {Planar.Scene} scene Scene to add
 	 * @chainable
 	 */
-	flush() {
-		for ( let entity of this.additions ) {
-			this.entities.add( entity );
-			for ( let system of this.systems ) {
-				if ( system.isRelated( entity ) ) {
-					system.add( entity );
-				}
-			}
-		}
-		for ( let entity of this.deletions ) {
-			this.entities.delete( entity );
-			for ( let system of this.systems ) {
-				if ( system.has( entity ) ) {
-					system.delete( entity );
-				}
-			}
-			this.onDelete( entity );
-		}
-		this.additions.clear();
-		this.deletions.clear();
+	add( scene ) {
+		this.scenes.add( scene );
+		scene.attach( this );
 		return this;
 	}
 
 	/**
-	 * Queue entity to be added.
+	 * Delete a scene.
 	 *
-	 * Adds entity to the addition queue, removing it from the deletion queue if present.
+	 * Detaches scene and removes it from the scenes list.
 	 *
-	 * @param {Object} entity Entity to add to addition queue
-	 * @throws {Error} If entity has already exists
-	 * @throws {Error} If entity has already been added to addition queue
+	 * @param {Planar.Scene} scene Scene to delete
 	 * @chainable
 	 */
-	add( entity ) {
-		if ( this.deletions.has( entity ) ) {
-			this.deletions.delete( entity );
-		} else if ( this.entities.has( entity ) ) {
-			throw new Error( `"${entity.key}" already exists.` );
-		}
-		if ( this.additions.has( entity ) ) {
-			throw new Error( `"${entity.key}" has already been added to addition queue.` );
-		}
-		this.additions.add( entity );
+	delete( scene ) {
+		scene.detach();
+		this.scenes.delete( scene );
 		return this;
 	}
 
 	/**
-	 * Queue entity to be deleted.
+	 * Delete all scenes.
 	 *
-	 * Adds entity to the deletion queue, removing it from the addition queue if present.
-	 *
-	 * @param {Object} entity Entity to add to deletion queue
-	 * @throws {Error} If entity has already been added to deletion queue
-	 * @throws {Error} If entity key doesn't exist
-	 * @chainable
-	 */
-	delete( entity ) {
-		if ( this.deletions.has( entity ) ) {
-			throw new Error( `"${entity.key}" has already been added to deletion queue.` );
-		}
-		if ( !entity ) {
-			throw new Error( `"${entity.key}" doesn't exist.` );
-		}
-		if ( this.additions.has( entity ) ) {
-			this.additions.delete( entity );
-		}
-		this.deletions.add( entity );
-		return this;
-	}
-
-	/**
-	 * Queue all entities to be cleared.
-	 *
-	 * Clears queued additions and deletions, then queues all entities to be deleted.
+	 * Detaches each scene and clears the scenes list.
 	 *
 	 * @chainable
 	 */
 	clear() {
-		this.additions.clear();
-		this.deletions.clear();
-		this.entities.forEach( this.deletions.add, this.deletions );
+		for ( let scene of this.scenes ) {
+			scene.detach();
+		}
+		this.scenes.clear();
 		return this;
 	}
 
@@ -169,13 +116,14 @@ Planar.App = class {
 		if ( this.running ) {
 			let delta = Math.min( now - this.then, 200 );
 			this.then = now;
-			this.iteration++;
-			this.flush();
+			for ( let scene of this.scenes ) {
+				scene.flush();
+			}
 			for ( let system of this.systems ) {
 				system.update( delta );
 			}
-			for ( let entity of this.entities ) {
-				entity.update( delta );
+			for ( let scene of this.scenes ) {
+				scene.update( delta );
 			}
 			this.request = requestAnimationFrame( this.loop );
 		}
