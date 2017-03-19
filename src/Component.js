@@ -2,7 +2,6 @@
  * Component.
  *
  * @class
- * @module Components
  */
 Planar.Component = class {
 	/**
