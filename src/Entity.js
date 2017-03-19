@@ -216,4 +216,9 @@ Planar.Entity = class {
 	}
 };
 
+/**
+ * @private
+ * @static
+ * @property {number} Global unique entity ID counter
+ */
 Planar.Entity.count = 0;
