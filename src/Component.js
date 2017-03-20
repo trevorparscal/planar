@@ -212,6 +212,7 @@ Planar.Component.define( {
 	 * @memberof Components
 	 */
 	warp: {
-		scale: [ Planar.Point, () => new Planar.Point( 1, 1 ) ]
+		scale: [ Planar.Point, () => new Planar.Point( 1, 1 ) ],
+		skew: [ Planar.Point, () => new Planar.Point( 0, 0 ) ]
 	}
 } );

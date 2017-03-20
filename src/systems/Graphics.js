@@ -71,6 +71,7 @@ Planar.System.Graphics = class extends Planar.System {
 				},
 				warp: ( warp ) => {
 					graphic.scale.copy( warp.scale );
+					graphic.skew.copy( warp.skew );
 				},
 				filter: ( filter ) => {
 					graphic.alpha = filter.alpha;

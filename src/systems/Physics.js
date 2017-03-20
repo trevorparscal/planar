@@ -148,12 +148,33 @@ function createBody( entity ) {
  */
 function updateBody( entity, body ) {
 	const { shape, transform, warp } = entity.components,
-		vertices = body.vertices;
-	for ( let i = 0, len = shape.points.length; i < len; i++ ) {
-		( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );	
-	}
-	if ( warp ) {
-		Matter.Vertices.scale( vertices, warp.scale.x, warp.scale.y, transform.pivot );
+		vertices = body.vertices,
+		scaled = warp && ( warp.scale.x !== 1 || warp.scale.y !== 1 );
+		skewed = warp && ( warp.skew.x !== 0 || warp.skew.y !== 0 );
+
+	if ( scaled || skewed ) {
+		const { pivot } = transform,
+			{ scale, skew } = warp;
+		for ( let i = 0, len = shape.points.length; i < len; i++ ) {
+			let sx, sy,
+				point = shape.points[i],
+				ox = point.x - pivot.x,
+				oy = point.y - pivot.y;
+			if ( scaled ) {
+				sx = ox *= scale.x;
+				sy = oy *= scale.y;
+			}
+			if ( skewed ) {
+				sx = ox + oy * Math.tan( skew.x );
+				sy = oy + ox * Math.tan( skew.y );
+			}
+			vertices[i].x = pivot.x + sx;
+			vertices[i].y = pivot.y + sy;
+		}
+	} else {
+		for ( let i = 0, len = shape.points.length; i < len; i++ ) {
+			( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );	
+		}
 	}
 	Matter.Vertices.rotate( vertices, transform.rotation, transform.pivot );
 	Matter.Body.setVertices( body, vertices );
