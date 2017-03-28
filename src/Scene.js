@@ -166,11 +166,13 @@ Planar.Scene = class {
 	 * @chainable
 	 */
 	reconcile( ...entities ) {
-		if ( !this.entities.has( entity ) ) {
-			throw new Error( `"${entity.key}" doesn't exist.` );
-		}
-		if ( !this.deletions.has( entity ) && !this.additions.has( entity ) ) {
-			this.reconciliations.add( entities );
+		for ( let entity of entities ) {
+			if ( !this.entities.has( entity ) ) {
+				throw new Error( `"${entity.key}" doesn't exist.` );
+			}
+			if ( !this.deletions.has( entity ) && !this.additions.has( entity ) ) {
+				this.reconciliations.add( entities );
+			}
 		}
 	}
 
