@@ -72,7 +72,7 @@ Planar.System.Physics = class extends Planar.System {
 					Matter.Body.set( body, {
 						density: material.density,
 						friction: material.dynamicFriction,
-						airFriction: material.airFriction,
+						frictionAir: material.airFriction,
 						frictionStatic: material.staticFriction,
 						restitution: material.restitution
 					} );
