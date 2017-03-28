@@ -11,12 +11,20 @@ Planar.System.Physics = class extends Planar.System {
 	 * @param {Object} options Initialization options
 	 * @param {number} options.enableSleep Allow bodies to fall asleep when they stop moving
 	 */
-	constructor( { enableSleep = true } = {} ) {
+	constructor( { enableSleep = true, gravity } = {} ) {
 		super();
 		this.engine = Matter.Engine.create( { enableSleep: enableSleep } );
 		this.world = this.engine.world;
 		this.bodies = new Map();
 		this.lengths = new Map();
+		if ( gravity ) {
+			if ( 'x' in gravity ) {
+				this.world.gravity.x = gravity.x;
+			}
+			if ( 'y' in gravity ) {
+				this.world.gravity.y = gravity.y;
+			}
+		}
 	}
 
 	/**
