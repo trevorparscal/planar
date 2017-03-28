@@ -14,11 +14,24 @@ Planar.System.Graphics = class extends Planar.System {
 	 * @param {number} options.transparent Transparent background
 	 * @param {number} options.antialias Anialias rendering
 	 */
-	constructor( { width = 512, height = 512, transparent = false, antialias = false } = {} ) {
+	constructor( options = {} ) {
+		const {
+			width = 512,
+			height = 512,
+			transparent = false,
+			antialias = false,
+			roundPixels = false
+		} = options;
 		super();
-		this.renderer = PIXI.autoDetectRenderer( width, height, transparent, antialias );
+		this.renderer = PIXI.autoDetectRenderer(
+			options.width,
+			options.height,
+			options.transparent,
+			options.antialias
+		);
+		this.renderer.roundPixels = options.roundPixels;
 		this.stage = new PIXI.Container();
-		this.graphics = new Map();
+		this.objects = new Map();
 		document.body.appendChild( this.renderer.view );
 	}
 
@@ -26,7 +39,8 @@ Planar.System.Graphics = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	isRelated( entity ) {
-		return entity.has( 'draw', 'shape', 'transform' );
+		return entity.has( 'transform' ) &&
+			( entity.has( 'shape', 'draw' ) || entity.has( 'sprite' ) );
 	}
 
 	/**
@@ -34,9 +48,23 @@ Planar.System.Graphics = class extends Planar.System {
 	 */
 	add( entity ) {
 		super.add( entity );
-		const graphic = new PIXI.Graphics();
-		this.graphics.set( entity.key, graphic );
-		this.stage.addChild( graphic );
+		var object;
+		if ( entity.has( 'shape', 'draw' ) ) {
+			object = new PIXI.Graphics();
+		} else if ( entity.has( 'sprite' ) ) {
+			const { sprite: { resource, texture, anchor } } = entity.components;
+			object = new PIXI.Sprite( texture ?
+				PIXI.loader.resources[resource].textures[texture] :
+				PIXI.loader.resources[resource].texture
+			);
+			object.anchor.x = anchor.x;
+			object.anchor.y = anchor.y;
+		}
+		if ( !object ) {
+			throw new Error( 'Invalid entity.' );
+		}
+		this.objects.set( entity.key, object );
+		this.stage.addChild( object );
 	}
 
 	/**
@@ -44,9 +72,9 @@ Planar.System.Graphics = class extends Planar.System {
 	 */
 	delete( entity ) {
 		super.delete( entity );
-		const graphic = this.graphics.get( entity.key );
-		this.graphics.delete( entity.key );
-		this.stage.removeChild( graphic );
+		const object = this.objects.get( entity.key );
+		this.objects.delete( entity.key );
+		this.stage.removeChild( object );
 	}
 
 	/**
@@ -55,26 +83,37 @@ Planar.System.Graphics = class extends Planar.System {
 	update( delta ) {
 		/*jshint loopfunc: true */
 		for ( let entity of this.entities ) {
-			const graphic = this.graphics.get( entity.key );
-			entity.handle( [ 'shape', 'draw' ], ( shape, draw ) => {
-				graphic.clear();
-				if ( shape.type === 'circle' ) {
-					drawCircle( graphic, shape.radius, draw );
-				} else {
-					drawPolygon( graphic, shape.points, draw );
-				}
-			} );
+			const object = this.objects.get( entity.key );
+			if ( object instanceof PIXI.Sprite ) {
+				entity.handle( 'sprite', ( sprite ) => {
+					const { resource, texture, anchor } = sprite;
+					object.texture = texture ?
+						PIXI.loader.resources[resource].textures[texture] :
+						PIXI.loader.resources[resource].texture;
+					object.anchor.x = anchor.x;
+					object.anchor.y = anchor.y;
+				} );
+			} else if ( object instanceof PIXI.Graphics ) {
+				entity.handle( [ 'shape', 'draw' ], ( shape, draw ) => {
+					object.clear();
+					if ( shape.type === 'circle' ) {
+						drawCircle( object, shape.radius, draw );
+					} else {
+						drawPolygon( object, shape.points, draw );
+					}
+				} );
+			}
 			entity.handle( {
 				transform: ( transform ) => {
-					graphic.position.copy( transform.position );
-					graphic.rotation = transform.rotation;
+					object.position.copy( transform.position );
+					object.rotation = transform.rotation;
 				},
 				warp: ( warp ) => {
-					graphic.scale.copy( warp.scale );
-					graphic.skew.copy( warp.skew );
+					object.scale.copy( warp.scale );
+					object.skew.copy( warp.skew );
 				},
 				filter: ( filter ) => {
-					graphic.alpha = filter.alpha;
+					object.alpha = filter.alpha;
 				}
 			} );
 		}

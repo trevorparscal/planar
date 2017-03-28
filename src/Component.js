@@ -117,6 +117,17 @@ Planar.Component.define( {
 		angularVelocity: [ Number, 0 ]
 	},
 	/**
+	 * Sprite component.
+	 *
+	 * @class
+	 * @extends {Planar.Component}
+	 */
+	sprite: {
+		texture: [ String, '' ],
+		resource: [ String, '' ],
+		anchor: [ Planar.Point, () => new Planar.Point( 0.5, 0.5 ) ]
+	},
+	/**
 	 * Draw component.
 	 *
 	 * @class
