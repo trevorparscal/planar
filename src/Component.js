@@ -88,13 +88,6 @@ Planar.Component.schema = {};
 
 Planar.Component.define( {
 	/**
-	 * Animation component.
-	 *
-	 * @class
-	 * @extends {Planar.Component}
-	 */
-	animation: {},
-	/**
 	 * Motion component.
 	 *
 	 * @class
@@ -162,13 +155,6 @@ Planar.Component.define( {
 		staticFriction: [ Number, 0.05 ],
 		restitution: [ Number, 0 ]
 	},
-	/**
-	 * Player component.
-	 *
-	 * @class
-	 * @extends {Planar.Component}
-	 */
-	player: {},
 	/**
 	 * Shape component.
 	 *
