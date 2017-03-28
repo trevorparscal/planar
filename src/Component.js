@@ -120,6 +120,29 @@ Planar.Component.define( {
 		anchor: [ Planar.Point, () => new Planar.Point( 0.5, 0.5 ) ]
 	},
 	/**
+	 * Tilemap grid component.
+	 *
+	 * @class
+	 * @extends {Planar.Component}
+	 */
+	tilemapGrid: {
+		size: [ Planar.Point, () => new Planar.Point() ],
+		unit: [ Number, 1 ],
+		resource: [ String, '' ]
+	},
+	/**
+	 * Tilemap tile component.
+	 *
+	 * @class
+	 * @extends {Planar.Component}
+	 */
+	tilemapTile: {
+		grid: [ Number, NaN ],
+		cell: [ Planar.Point, () => new Planar.Point() ],
+		texture: [ String, '' ],
+		block: [ Boolean, false ]
+	},
+	/**
 	 * Draw component.
 	 *
 	 * @class
