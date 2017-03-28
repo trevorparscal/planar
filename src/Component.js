@@ -43,7 +43,7 @@ Planar.Component = class {
 	 * @constructor
 	 * @param {Object} state Initial property values, must conform to component schema
 	 * @throws {Error} If a property is invalid
-	 * @throws {Error} If property definiton in schema is invalid 
+	 * @throws {Error} If property definiton in schema is invalid
 	 */
 	constructor( state ) {
 		const schema = this.constructor.schema;
@@ -92,7 +92,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	animation: {},
 	/**
@@ -100,7 +99,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	motion: {
 		isStatic: [ Boolean, false ],
@@ -133,7 +131,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	draw: {
 		fillColor: [ Number, 0 ],
@@ -148,7 +145,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	filter: {
 		alpha: [ Number, 1 ]
@@ -158,7 +154,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	material: {
 		density: [ Number, 0.001 ],
@@ -172,7 +167,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	player: {},
 	/**
@@ -180,7 +174,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	shape: {
 		type: [ String, 'rectangle' ],
@@ -209,7 +202,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	transform: {
 		position: [ Planar.Point, () => new Planar.Point( 0, 0 ) ],
@@ -221,7 +213,6 @@ Planar.Component.define( {
 	 *
 	 * @class
 	 * @extends {Planar.Component}
-	 * @memberof Components
 	 */
 	warp: {
 		scale: [ Planar.Point, () => new Planar.Point( 1, 1 ) ],
