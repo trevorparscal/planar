@@ -1,0 +1,16 @@
+{
+	"preset": "wikimedia",
+	"requireSpacesInsideBrackets": false,
+	"requireSpacesInsideArrayBrackets": "all",
+	"requireVarDeclFirst": false,
+	"requireMultipleVarDecl": true,
+	"jsDoc": {
+		"preset": "jsdoc3",
+		"extra": {
+			"typedef": false,
+			"example": false,
+			"copyright": false,
+			"license": false
+		}
+	}
+}
