@@ -105,6 +105,7 @@ Planar.Component.define( {
 	motion: {
 		isStatic: [ Boolean, false ],
 		isSensor: [ Boolean, false ],
+		preventRotation: [ Boolean, false ],
 		timeScale: [ Number, 1 ],
 		force: [ Planar.Point, () => new Planar.Point() ],
 		torque: [ Number, 0 ],

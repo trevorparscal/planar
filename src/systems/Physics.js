@@ -83,6 +83,9 @@ Planar.System.Physics = class extends Planar.System {
 						isSensor: motion.isSensor,
 						timeScale: motion.timeScale
 					} );
+					if ( motion.preventRotation ) {
+						Matter.Body.setInertia( body, Infinity );
+					}
 					if ( motion.force ) {
 						body.force.x += motion.force.x;
 						body.force.y += motion.force.y;
@@ -126,7 +129,7 @@ Planar.System.Physics = class extends Planar.System {
  * @return {Matter.Body}
  */
 function createBody( entity ) {
-	const { shape, transform, warp } = entity.components,
+	const { shape, transform, warp, motion } = entity.components,
 		body = Matter.Bodies.fromVertices( 0, 0, [ shape.points ] );
 	if ( !body ) {
 		throw new Error( 'Invalid shape.' );
@@ -136,6 +139,9 @@ function createBody( entity ) {
 		Matter.Body.scale( body, warp.scale.x, warp.scale.y );
 	}
 	Matter.Body.rotate( body, transform.rotation );
+	if ( motion.preventRotation ) {
+		body.inertia = Infinity;
+	}
 	return body;
 }
 
