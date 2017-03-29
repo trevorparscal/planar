@@ -3,7 +3,6 @@
  * @licence MIT
  * @link https://git.io/vSmWe
  */
-
 window.Collision = {
 	/**
 	 * Math utilities.
@@ -20,7 +19,7 @@ window.Collision = {
 		 * @return {number} Clamped number
 		 */
 		clamp: function ( value, min, max ) {
-			return value < min ? min : ( value > max ? max : value );
+			return Math.min( max, Math.max( min, value ) );
 		}
 	},
 
