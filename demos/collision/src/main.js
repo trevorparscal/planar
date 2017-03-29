@@ -245,6 +245,24 @@ class SpatialHashDemo extends Demo {
 	constructor( id, field ) {
 		super( id, SpatialHash, field );
 	}
+
+	/*
+	 * Draw SpatialHash buckets.
+	 */
+	draw() {
+		super.draw();
+		const ctx = this.canvasContext;
+
+		const { field, divisions } = this.space,
+			col = field.width / divisions,
+			row = field.height / divisions;
+		for ( let x = 0; x < divisions; x++ ) {
+			for ( let y = 0; y < divisions; y++ ) {
+				ctx.strokeStyle = 'rgba(0,128,255,0.5)';
+				ctx.strokeRect( field.x + col * x, field.y + row * y, col, row );
+			}
+		}
+	}
 }
 
 window.QuadtreeDemo = QuadtreeDemo;

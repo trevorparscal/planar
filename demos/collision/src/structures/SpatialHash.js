@@ -25,6 +25,7 @@ class SpatialHash extends SpatialPartition {
 			shift = Math.log2( nearest / divisions );
 		super();
 		this.field = field;
+		this.divisions = divisions;
 		this.getHashes = getHashes.bind( null, field.x, field.y, ( max >> shift ) - 1, shift );
 		this.objects = {};
 		this.keys = [];
