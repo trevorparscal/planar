@@ -8,14 +8,16 @@ Planar.Scene = class {
 	 * Create a scene.
 	 *
 	 * @constructor
+	 * @param {...Planar.Entities} entities Entities enqueue for addition
 	 */
-	constructor() {
+	constructor( ...entities ) {
 		// Properties
 		this.app = null;
 		this.entities = new Set();
 		this.additions = new Set();
 		this.deletions = new Set();
 		this.reconciliations = new Set();
+		this.add( ...entities );
 	}
 
 	/**

@@ -8,13 +8,16 @@ Planar.Entity = class {
 	 * Create an entity.
 	 *
 	 * @constructor
+	 * @param {Object.<string,Object>} [components={}] List of components to add as
+	 *   component-key/initial-state pairs
 	 */
-	constructor() {
+	constructor( components = {} ) {
 		this.scene = null;
 		this.iteration = 0;
 		this.components = {};
 		this.changed = {};
 		this.key = this.constructor.count++;
+		this.add( components );
 	}
 
 	/**
