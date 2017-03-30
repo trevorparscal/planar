@@ -51,7 +51,7 @@ class Player extends Planar.Entity {
 		super();
 		this.add( {
 			player: {},
-			shape: { type: 'rectangle', width: 16, height: 16 },
+			shape: { type: 'rectangle', size: new Planar.Point( 16 ) },
 			draw: { fillColor: 0x00FF00 },
 			transform: {},
 			motion: {

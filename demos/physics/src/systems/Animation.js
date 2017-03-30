@@ -48,7 +48,7 @@ Planar.System.Animation = class extends Planar.System {
 					size = 32,
 					hash = entity.components.shape.hash;
 				entity.change( { shape: [
-					{ type: 'rectangle', width: size, height: size }, 
+					{ type: 'rectangle', size: new Planar.Point( size ) },
 					{ type: 'circle', radius: size / 2 },
 					{ type: 'ngon', radius: size / 2, sides: 3 },
 					{ type: 'ngon', radius: size / 2, sides: 5 }

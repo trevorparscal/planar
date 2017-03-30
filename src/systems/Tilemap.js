@@ -53,8 +53,7 @@ Planar.System.Tilemap = class extends Planar.System {
 				},
 				shape: {
 					type: 'rectangle',
-					width: tilemapGrid.unit,
-					height: tilemapGrid.unit
+					size: new Planar.Point( tilemapGrid.unit )
 				},
 				sprite: {
 					resource: tilemapGrid.resource,

@@ -64,8 +64,8 @@ function createPoints( shape ) {
 	var points;
 	switch ( shape.type ) {
 		case 'rectangle':
-			const hw = shape.width / 2,
-				hh = shape.height / 2;
+			const hw = shape.size.x / 2,
+				hh = shape.size.y / 2;
 			points = [
 				{ x: -hw, y: -hh },
 				{ x: hw, y: -hh },

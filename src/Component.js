@@ -188,13 +188,12 @@ Planar.Component.define( {
 		type: [ String, 'rectangle' ],
 		radius: [ Number, 0 ],
 		sides: [ Number, 0 ],
-		width: [ Number, 0 ],
-		height: [ Number, 0 ],
+		size: [ Planar.Point, () => new Planar.Point( 0, 0 ) ],
 		points: [ Array, [] ],
 		hash: function () {
 			switch ( this.type ) {
 				case 'rectangle':
-					return 'r:' + this.width + ',' + this.height;
+					return 'r:' + this.size.x + ',' + this.size.y;
 				case 'circle':
 					return 'c:' + this.radius;
 				case 'ngon':

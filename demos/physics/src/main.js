@@ -17,7 +17,7 @@ function addShape( x, y, size, player ) {
 	shape.add( {
 		animation: {},
 		shape: [
-			{ type: 'rectangle', width: size, height: size }, 
+			{ type: 'rectangle', size: new Planar.Point( size ) },
 			{ type: 'circle', radius: size / 2 },
 			{ type: 'ngon', radius: size / 2, sides: 3 },
 			{ type: 'ngon', radius: size / 2, sides: 5 }
@@ -50,7 +50,7 @@ function addShape( x, y, size, player ) {
 function addPlatform( x, y, width, height ) {
 	var platform = new Planar.Entity();
 	platform.add( {
-		shape: { type: 'rectangle', width: width, height: height },
+		shape: { type: 'rectangle', size: new Planar.Point( width, height ) },
 		draw: { fillColor: 0x444444 },
 		transform: { position: new Planar.Point( x, y ) },
 		motion: { isStatic: true },
