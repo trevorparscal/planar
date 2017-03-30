@@ -64,16 +64,7 @@ Planar.System.Physics = class extends Planar.System {
 		for ( let entity of this.entities ) {
 			let body = this.bodies.get( entity.key );
 			entity.handle( [ 'shape', 'warp' ], ( shape, warp ) => {
-				if ( shape.points.length !== this.lengths.get( entity.key ) ) {
-					// Replace body
-					Matter.World.remove( this.world, body );
-					body = createBody( entity );
-					this.bodies.set( entity.key, body );
-					this.lengths.set( entity.key, shape.points.length );
-					Matter.World.add( this.world, body );
-				} else {
-					updateBody( entity, body );
-				}
+				updateBody( entity, body );
 			} );
 			entity.handle( {
 				material: ( material ) => {
@@ -162,14 +153,33 @@ function createBody( entity ) {
  */
 function updateBody( entity, body ) {
 	const { shape, transform, warp } = entity.components,
+		scaled = warp && ( warp.scale.x !== 1 || warp.scale.y !== 1 ),
+		skewed = warp && ( warp.skew.x !== 0 || warp.skew.y !== 0 ),
 		vertices = body.vertices,
-		scaled = warp && ( warp.scale.x !== 1 || warp.scale.y !== 1 );
-		skewed = warp && ( warp.skew.x !== 0 || warp.skew.y !== 0 );
+		len = shape.points.length;
 
+	// Resize vertices array
+	if ( vertices.length < len ) {
+		// Grow
+		for ( let i = vertices.length; i < len; i++ ) {
+			vertices[i] = {
+				x: 0,
+				y: 0,
+				index: i,
+				body: body,
+				isInternal: false
+			};
+		}
+	} else if ( vertices.length > len ) {
+		// Shrink
+		vertices.length = shape.points.length;
+	}
+
+	// Set new vertex positions
 	if ( scaled || skewed ) {
 		const { pivot } = transform,
 			{ scale, skew } = warp;
-		for ( let i = 0, len = shape.points.length; i < len; i++ ) {
+		for ( let i = 0; i < len; i++ ) {
 			let sx, sy,
 				point = shape.points[i],
 				ox = point.x - pivot.x,
@@ -186,8 +196,8 @@ function updateBody( entity, body ) {
 			vertices[i].y = pivot.y + sy;
 		}
 	} else {
-		for ( let i = 0, len = shape.points.length; i < len; i++ ) {
-			( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );	
+		for ( let i = 0; i < len; i++ ) {
+			( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );
 		}
 	}
 	Matter.Vertices.rotate( vertices, transform.rotation, transform.pivot );

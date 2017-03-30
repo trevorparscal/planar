@@ -43,12 +43,12 @@ Planar.System.Animation = class extends Planar.System {
 			let tween = this.tweens.get( entity.key );
 			tween.value++;
 			// Change the shape every now and then
-			if ( tween.value % 100 === 0 ) {
+			if ( tween.value % 10 === 0 ) {
 				let index = Math.round( Math.random() * 3 ),
 					size = 32,
 					hash = entity.components.shape.hash;
 				entity.change( { shape: [
-					{ type: 'rectangle', width: size, height: size }, 
+					{ type: 'rectangle', width: size, height: size },
 					{ type: 'circle', radius: size / 2 },
 					{ type: 'ngon', radius: size / 2, sides: 3 },
 					{ type: 'ngon', radius: size / 2, sides: 5 }

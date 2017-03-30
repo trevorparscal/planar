@@ -59,8 +59,8 @@ function addPlatform( x, y, width, height ) {
 	scene.add( platform );
 }
 
-for ( let i = 0; i < 5; i++ ) {
-	addShape( 128 + 32 * i, 96, 32, i === 1 );
+for ( let i = 0; i < 20; i++ ) {
+	addShape( 128 + 16 * i, 96, 32, i === 1 );
 }
 addPlatform( 256, 32, 512, 64 );
 addPlatform( 256, 480, 512, 64 );
