@@ -40,7 +40,7 @@ Planar.System.Graphics = class extends Planar.System {
 	 */
 	isRelated( entity ) {
 		return entity.has( 'transform' ) &&
-			( entity.has( 'shape', 'draw' ) || entity.has( 'sprite' ) );
+			( entity.has( 'shape', 'draw' ) || entity.has( 'sprite' ) || entity.has( 'camera' ) );
 	}
 
 	/**

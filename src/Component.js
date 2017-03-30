@@ -88,6 +88,15 @@ Planar.Component.schema = {};
 
 Planar.Component.define( {
 	/**
+	 * Camera component.
+	 *
+	 * @class
+	 * @extends {Planar.Component}
+	 */
+	camera: {
+		view: [ Planar.Point, () => new Planar.Point() ]
+	},
+	/**
 	 * Motion component.
 	 *
 	 * @class
