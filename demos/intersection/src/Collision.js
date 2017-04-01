@@ -3,85 +3,19 @@
  * @licence MIT
  * @link https://git.io/vSmWe
  */
-window.Collision = {
-	/**
-	 * Math utilities.
-	 *
-	 * @class
-	 */
-	Math: {
-		/**
-		 * Clamp a value within a range.
-		 *
-		 * @param {number} value Number to clamp
-		 * @param {number} min Minimum value
-		 * @param {number} max Maximum value
-		 * @return {number} Clamped number
-		 */
-		clamp: function ( value, min, max ) {
-			return Math.min( max, Math.max( min, value ) );
-		}
-	},
+window.Collision = {};
 
-	/**
-	 * Point utilities.
-	 *
-	 * @class
-	 */
-	Point: {
-		/**
-		 * Create a point.
-		 *
-		 * Returns a plain object.
-		 *
-		 * @param {number} x Horizontal position
-		 * @param {number} x Vertical position
-		 * @param {CollisionPoint} Created point
-		 */
-		create: function ( x = 0, y = 0 ) {
-			return { x: x, y: y };
-		},
+/**
+ * @typedef {Vector}
+ * @property {number} x Horizontal position
+ * @property {number} x Vertical position
+ */
 
-		/**
-		 * Clone a point.
-		 *
-		 * @param {Point} point Point to clone
-		 * @param {CollisionPoint} Cloned point
-		 */
-		clone: function ( point ) {
-			return { x: this.x, y: this.y };
-		},
-
-		/**
-		 * Get the length of a line to a point from its origin.
-		 *
-		 * @param {Point} point Point to mesure the length of
-		 * @return {number} Point length
-		 */
-		length: function ( point ) {
-			const length = point.x * point.x + point.y * point.y;
-			if ( length > 0 ) {
-				return Math.sqrt( length );
-			}
-		},
-
-		/**
-		 * Normalize a point so it is in the same direction but in the range of [0..1].
-		 *
-		 * Modifies the point in place.
-		 *
-		 * @param {Point} point Point to normalize
-		 */
-		normalize: function ( point ) {
-			const length = Collision.Point.length( point );
-			if ( length > 0 ) {
-				const inverseLength = 1.0 / length;
-				point.x *= inverseLength;
-				point.y *= inverseLength;
-			}
-		}
-	}
-};
+/**
+ * @typedef {AxisAlignedBoundingBox}
+ * @property {Vector} position Position of box
+ * @property {Vector} half Distance from the center to the outside edges along each axis
+ */
 
 /**
  * Hit of one object on another.
@@ -93,11 +27,11 @@ Collision.Hit = class {
 	 * Create a hit.
 	 *
 	 * @constructor
-	 * @param {Point|Shape} collider Object being collision with, copied by reference
+	 * @param {AxisAlignedBoundingBox} collider Object being collided with
 	 */
 	constructor ( collider ) {
 		/**
-		 * @property {Point|Shape} Object being collided with
+		 * @property {AxisAlignedBoundingBox} Object being collided with
 		 */
 		this.collider = collider;
 		/**
@@ -145,29 +79,11 @@ Collision.Sweep = class {
 	}
 };
 
-/**
- * @typedef {CollisionAABB}
- * @property {Vector} position Position of box
- * @property {Vector} half Distance from the center to the outside edges along each axis
- */
-
 Collision.AABB = {
-	/**
-	 * Create an axis-aligned bounding-box.
-	 *
-	 * @param {Vector} position Position of box, copied by value
-	 * @param {Vector} half Distance from the center to the outside edges along each axis, copied by
-	 *  value
-	 * @return {CollisionAABB} Created AABB
-	 */
-	create: function ( { x = 0, y = 0 } = {}, { hx = 0, hy = 0 } = {} ) {
-		return { position: { x: x, y: x }, half: { x: hx, y: hy } };
-	},
-
 	/**
 	 * Check if a point is inside an AABB.
 	 *
-	 * @param {CollisionAABB} aabb AABB to test intersection with
+	 * @param {AxisAlignedBoundingBox} aabb AABB to test intersection with
 	 * @param {CollisionPoint} point Point to test for collision
 	 * @return {Collision.Hit|null} Hit if intersection occured, null otherwise
 	 */
@@ -203,13 +119,13 @@ Collision.AABB = {
 	/**
 	 * Check if a line segment runs into or through an AABB.
 	 *
-	 * @param {CollisionAABB} aabb AABB to test intersection with
+	 * @param {AxisAlignedBoundingBox} aabb AABB to test intersection with
 	 * @param {CollisionPoint} position Line segment start
 	 * @param {CollisionPoint} delta Line segment end, relative to start
-	 * @param {CollisionPoint} padding Space to be added around the aabb during testing
+	 * @param {CollisionPoint} [padding] Space to be added around the aabb during testing
 	 * @return {Collision.Hit|null} Hit if intersection occured, null otherwise
 	 */
-	intersectSegment: function ( aabb, start, delta, padding ) {
+	intersectSegment: function ( aabb, start, delta, padding = {} ) {
 		var farTime, farTimeX, farTimeY, hit, nearTime, nearTimeX, nearTimeY, scaleX, scaleY, signX,
 			signY;
 		const { x: paddingX = 0, y: paddingY = 0 } = padding;
@@ -231,7 +147,7 @@ Collision.AABB = {
 			return null;
 		}
 		hit = new Hit( aabb );
-		hit.time = Collision.Math.clamp( nearTime, 0, 1 );
+		hit.time = clamp( nearTime, 0, 1 );
 		if ( nearTimeX > nearTimeY ) {
 			hit.normal.x = -signX;
 			hit.normal.y = 0;
@@ -249,7 +165,7 @@ Collision.AABB = {
 	/**
 	 * Check if an AABB intersects another AABB.
 	 *
-	 * @param {CollisionAABB} aabb AABB to test intersection with
+	 * @param {AxisAlignedBoundingBox} aabb AABB to test intersection with
 	 * @param {[type]} box [description]
 	 * @return {[type]} [description]
 	 */
@@ -285,7 +201,7 @@ Collision.AABB = {
 	/**
 	 * Check if an AABB will intersect another AABB.
 	 *
-	 * @param {CollisionAABB} aabb AABB to test intersection with
+	 * @param {AxisAlignedBoundingBox} aabb AABB to test intersection with
 	 * @param {[type]} box [description]
 	 * @param {[type]} delta [description]
 	 * @return {[type]} [description]
@@ -296,20 +212,20 @@ Collision.AABB = {
 		if ( delta.x === 0 && delta.y === 0 ) {
 			sweep.position.x = box.position.x;
 			sweep.position.y = box.position.y;
-			sweep.hit = aabb.intersectAABB( box );
+			sweep.hit = AABB.intersectAABB( aabb, box );
 			if ( sweep.hit !== null ) {
 				sweep.time = sweep.hit.time = 0;
 			} else {
 				sweep.time = 1;
 			}
 		} else {
-			sweep.hit = aabb.intersectSegment( box.position, delta, box.half.x, box.half.y );
+			sweep.hit = AABB.intersectSegment( aabb, box.position, delta, box.half );
 			if ( sweep.hit !== null ) {
-				sweep.time = Collision.Math.clamp( sweep.hit.time - Math.EPSILON, 0, 1 );
+				sweep.time = clamp( sweep.hit.time - Math.EPSILON, 0, 1 );
 				sweep.position.x = box.position.x + delta.x * sweep.time;
 				sweep.position.y = box.position.y + delta.y * sweep.time;
-				Collision.Point.clone( delta, direction );
-				Collision.Point.normalize( direction );
+				direction = { x: delta.x, y: delta.y };
+				normalize( direction );
 				sweep.hit.position.x += direction.x * box.half.x;
 				sweep.hit.position.y += direction.y * box.half.y;
 			} else {
@@ -324,8 +240,8 @@ Collision.AABB = {
 	/**
 	 * Check if an AABB will intersect a list of static AABBs.
 	 *
-	 * @param {CollisionAABB} aabb AABB to test intersection with
-	 * @param {CollisionAABB} staticColliders List of static AABBs to test collision with
+	 * @param {AxisAlignedBoundingBox} aabb AABB to test intersection with
+	 * @param {AxisAlignedBoundingBox} staticColliders List of static AABBs to test collision with
 	 * @param {CollisionPoint} delta Distance of travel to sweep `aabb` with
 	 * @return {Collision.Sweep} Sweep of nearest collision
 	 */
@@ -345,3 +261,33 @@ Collision.AABB = {
 		return nearest;
 	}
 };
+
+/**
+ * Clamp a value within a range.
+ *
+ * @private
+ * @param {number} value Number to clamp
+ * @param {number} min Minimum value
+ * @param {number} max Maximum value
+ * @return {number} Clamped number
+ */
+function clamp( value, min, max ) {
+	return Math.min( max, Math.max( min, value ) );
+}
+
+/**
+ * Normalize a point so it is in the same direction but in the range of [0..1].
+ *
+ * Modifies the point in place.
+ *
+ * @param {Point} point Point to normalize
+ */
+function normalize( point ) {
+	var length = point.x * point.x + point.y * point.y;
+	if ( length > 0 ) {
+		length = Math.sqrt( length );
+		const inverseLength = 1.0 / length;
+		point.x *= inverseLength;
+		point.y *= inverseLength;
+	}
+}
