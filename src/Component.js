@@ -12,7 +12,7 @@ Planar.Component = class {
 	/**
 	 * @typedef ComponentPropertyDefinition
 	 * @type {Array}
-	 * @property {Function} 0 Property type, equivilant to the constructor property of a valid value
+	 * @property {string} 0 Property type, equivilant to using `typeof` on a valid value
 	 * @property {*} 1 Default value
 	 */
 
@@ -52,9 +52,9 @@ Planar.Component = class {
 			if ( typeof definition === 'function' ) {
 				Object.defineProperty( this, property, { get: definition.bind( this ) } );
 			} else if ( Array.isArray( definition ) ) {
-				let [ constructor, defaultValue ] = definition;
+				let [ type, defaultValue ] = definition;
 				if ( state[property] !== undefined ) {
-					if ( state[property].constructor !== constructor ) {
+					if ( typeof state[property] !== type ) {
 						throw new Error( `"${property}" type is invlaid.` );
 					}
 					this[property] = state[property];
@@ -94,19 +94,19 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	motion: {
-		isStatic: [ Boolean, false ],
-		isSensor: [ Boolean, false ],
-		preventRotation: [ Boolean, false ],
-		timeScale: [ Number, 1 ],
-		force: [ Planar.Point, () => new Planar.Point() ],
-		torque: [ Number, 0 ],
-		area: [ Number, 0 ],
-		mass: [ Number, 0 ],
-		inertia: [ Number, 0 ],
-		linearSpeed: [ Number, 0 ],
-		linearVelocity: [ Planar.Point, () => new Planar.Point() ],
-		angularSpeed: [ Number, 0 ],
-		angularVelocity: [ Number, 0 ]
+		isStatic: [ 'boolean', false ],
+		isSensor: [ 'boolean', false ],
+		preventRotation: [ 'boolean', false ],
+		timeScale: [ 'number', 1 ],
+		force: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		torque: [ 'number', 0 ],
+		area: [ 'number', 0 ],
+		mass: [ 'number', 0 ],
+		inertia: [ 'number', 0 ],
+		linearSpeed: [ 'number', 0 ],
+		linearVelocity: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		angularSpeed: [ 'number', 0 ],
+		angularVelocity: [ 'number', 0 ]
 	},
 	/**
 	 * Sprite component.
@@ -115,9 +115,9 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	sprite: {
-		texture: [ String, '' ],
-		resource: [ String, '' ],
-		anchor: [ Planar.Point, () => new Planar.Point( 0.5, 0.5 ) ]
+		texture: [ 'string', '' ],
+		resource: [ 'string', '' ],
+		anchor: [ 'object', () => ( { x: 0.5, y: 0.5 } ) ]
 	},
 	/**
 	 * Tilemap grid component.
@@ -126,9 +126,9 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	tilemapGrid: {
-		size: [ Planar.Point, () => new Planar.Point() ],
-		unit: [ Number, 1 ],
-		resource: [ String, '' ]
+		size: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		unit: [ 'number', 1 ],
+		resource: [ 'string', '' ]
 	},
 	/**
 	 * Tilemap tile component.
@@ -137,10 +137,10 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	tilemapTile: {
-		grid: [ Number, NaN ],
-		cell: [ Planar.Point, () => new Planar.Point() ],
-		texture: [ String, '' ],
-		block: [ Boolean, false ]
+		grid: [ 'number', NaN ],
+		cell: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		texture: [ 'string', '' ],
+		block: [ 'boolean', false ]
 	},
 	/**
 	 * Draw component.
@@ -149,12 +149,12 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	draw: {
-		fillColor: [ Number, 0 ],
-		fillAlpha: [ Number, 1 ],
-		strokeWidth: [ Number, 0 ],
-		strokeColor: [ Number, 0 ],
-		strokeAlpha: [ Number, 1 ],
-		isDynamic: [Boolean, true]
+		fillColor: [ 'number', 0 ],
+		fillAlpha: [ 'number', 1 ],
+		strokeWidth: [ 'number', 0 ],
+		strokeColor: [ 'number', 0 ],
+		strokeAlpha: [ 'number', 1 ],
+		isDynamic: ['boolean', true]
 	},
 	/**
 	 * Filter component.
@@ -163,7 +163,7 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	filter: {
-		alpha: [ Number, 1 ]
+		alpha: [ 'number', 1 ]
 	},
 	/**
 	 * Material component.
@@ -172,11 +172,11 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	material: {
-		density: [ Number, 0.001 ],
-		dynamicFriction: [ Number, 0.1 ],
-		airFriction: [ Number, 0.01 ],
-		staticFriction: [ Number, 0.05 ],
-		restitution: [ Number, 0 ]
+		density: [ 'number', 0.001 ],
+		dynamicFriction: [ 'number', 0.1 ],
+		airFriction: [ 'number', 0.01 ],
+		staticFriction: [ 'number', 0.05 ],
+		restitution: [ 'number', 0 ]
 	},
 	/**
 	 * Shape component.
@@ -185,10 +185,10 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	shape: {
-		type: [ String, 'rectangle' ],
-		radius: [ Number, 0 ],
-		sides: [ Number, 0 ],
-		size: [ Planar.Point, () => new Planar.Point( 0, 0 ) ],
+		type: [ 'string', 'rectangle' ],
+		radius: [ 'number', 0 ],
+		sides: [ 'number', 0 ],
+		size: [ 'object', () => ( { x: 0, y: 0 } ) ],
 		points: [ Array, [] ],
 		hash: function () {
 			switch ( this.type ) {
@@ -212,9 +212,9 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	transform: {
-		position: [ Planar.Point, () => new Planar.Point( 0, 0 ) ],
-		pivot: [ Planar.Point, () => new Planar.Point( 0, 0 ) ],
-		rotation: [ Number, 0 ]
+		position: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		pivot: [ 'object', () => ( { x: 0, y: 0 } ) ],
+		rotation: [ 'number', 0 ]
 	},
 	/**
 	 * Warp component.
@@ -223,7 +223,7 @@ Planar.Component.define( {
 	 * @extends {Planar.Component}
 	 */
 	warp: {
-		scale: [ Planar.Point, () => new Planar.Point( 1, 1 ) ],
-		skew: [ Planar.Point, () => new Planar.Point( 0, 0 ) ]
+		scale: [ 'object', () => ( { x: 1, y: 1 } ) ],
+		skew: [ 'object', () => ( { x: 0, y: 0 } ) ]
 	}
 } );

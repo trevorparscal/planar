@@ -11,7 +11,7 @@ function loadMap() {
 	return Planar.getJSON( 'res/mini-map.json' ).then( ( data ) => {
 		const grid = new Planar.Entity();
 		grid.add( { 'tilemapGrid': {
-			size: new Planar.Point( data.size ),
+			size: { x: data.size, y: data.size },
 			unit: data.unit,
 			resource: 'res/' + data.texture
 		} } );
@@ -25,7 +25,7 @@ function loadMap() {
 				tile.add( {
 					tilemapTile: {
 						grid: grid.key,
-						cell: new Planar.Point( x, y ),
+						cell: { x: x, y: y },
 						texture: row[x],
 						block: data.blocks[y][x] !== ' '
 					}
@@ -51,7 +51,7 @@ class Player extends Planar.Entity {
 		super();
 		this.add( {
 			player: {},
-			shape: { type: 'rectangle', size: new Planar.Point( 16 ) },
+			shape: { type: 'rectangle', size: { x: 16, y: 16 } },
 			draw: { fillColor: 0x00FF00 },
 			transform: {},
 			motion: {

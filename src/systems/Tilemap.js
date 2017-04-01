@@ -46,14 +46,14 @@ Planar.System.Tilemap = class extends Planar.System {
 			const { tilemapGrid } = grid.entity.components;
 			entity.add( {
 				transform: {
-					position: new Planar.Point(
-						tilemapTile.cell.x * tilemapGrid.unit,
-						tilemapTile.cell.y * tilemapGrid.unit
-					)
+					position: {
+						x: tilemapTile.cell.x * tilemapGrid.unit,
+						y: tilemapTile.cell.y * tilemapGrid.unit
+					}
 				},
 				shape: {
 					type: 'rectangle',
-					size: new Planar.Point( tilemapGrid.unit )
+					size: { x: tilemapGrid.unit, y: tilemapGrid.unit }
 				},
 				sprite: {
 					resource: tilemapGrid.resource,

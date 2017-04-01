@@ -17,7 +17,7 @@ function addShape( x, y, size, player ) {
 	shape.add( {
 		animation: {},
 		shape: [
-			{ type: 'rectangle', size: new Planar.Point( size ) },
+			{ type: 'rectangle', size: { x: size, y: size } },
 			{ type: 'circle', radius: size / 2 },
 			{ type: 'ngon', radius: size / 2, sides: 3 },
 			{ type: 'ngon', radius: size / 2, sides: 5 }
@@ -30,11 +30,11 @@ function addShape( x, y, size, player ) {
 			] )
 		},
 		transform: {
-			position: new Planar.Point( x, y ),
+			position: { x: x, y: y },
 			rotation: Math.random() * ( Math.PI / 2 )
 		},
 		warp: {
-			//scale: new Planar.Point( 0.5 + Math.random() * 2, 0.5 + Math.random() * 2 )
+			//scale: { x: 0.5 + Math.random() * 2, y: 0.5 + Math.random() * 2 }
 		},
 		motion: {},
 		material: {}
@@ -50,16 +50,16 @@ function addShape( x, y, size, player ) {
 function addPlatform( x, y, width, height ) {
 	var platform = new Planar.Entity();
 	platform.add( {
-		shape: { type: 'rectangle', size: new Planar.Point( width, height ) },
+		shape: { type: 'rectangle', size: { x: width, y: height } },
 		draw: { fillColor: 0x444444 },
-		transform: { position: new Planar.Point( x, y ) },
+		transform: { position: { x: x, y: y } },
 		motion: { isStatic: true },
 		material: {}
 	} );
 	scene.add( platform );
 }
 
-for ( let i = 0; i < 5; i++ ) {
+for ( let i = 0; i < 10; i++ ) {
 	addShape( 128 + 32 * i, 96, 32, i === 1 );
 }
 addPlatform( 256, 32, 512, 64 );

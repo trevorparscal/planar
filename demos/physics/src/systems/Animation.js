@@ -48,7 +48,7 @@ Planar.System.Animation = class extends Planar.System {
 					size = 32,
 					hash = entity.components.shape.hash;
 				entity.change( { shape: [
-					{ type: 'rectangle', size: new Planar.Point( size ) },
+					{ type: 'rectangle', size: { x: size, y: size } },
 					{ type: 'circle', radius: size / 2 },
 					{ type: 'ngon', radius: size / 2, sides: 3 },
 					{ type: 'ngon', radius: size / 2, sides: 5 }
@@ -57,14 +57,14 @@ Planar.System.Animation = class extends Planar.System {
 			// Constantly change the scale and skew
 			entity.change( {
 				warp: {
-					scale: new Planar.Point(
-						1.5 + ( Math.sin( tween.value * ( Math.PI / 100 ) ) * 0.5 ),
-						1.5 + ( Math.cos( tween.value * ( Math.PI / 100 ) ) * 0.5 )
-					),
-					skew: new Planar.Point(
-						Math.sin( tween.value * ( Math.PI / 100 ) ) * 0.5,
-						Math.cos( tween.value * ( Math.PI / 100 ) ) * 0.5
-					)
+					scale: {
+						x: 1.5 + ( Math.sin( tween.value * ( Math.PI / 100 ) ) * 0.5 ),
+						y: 1.5 + ( Math.cos( tween.value * ( Math.PI / 100 ) ) * 0.5 )
+					},
+					skew: {
+						x: Math.sin( tween.value * ( Math.PI / 100 ) ) * 0.5,
+						y: Math.cos( tween.value * ( Math.PI / 100 ) ) * 0.5
+					}
 				}
 			} );
 		}

@@ -57,8 +57,8 @@ Planar.Component.define( {
 	 * @memberof Components
 	 */
 	player: {
-		walking: [ Boolean, false ],
-		direction: [ String, 'up' ]
+		walking: [ 'boolean', false ],
+		direction: [ 'string', 'up' ]
 	}
 } );
 

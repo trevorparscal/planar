@@ -16,7 +16,7 @@
 	shape.add( {
 		shape: { type: 'circle', radius: 32, },
 		draw: { fillColor: 0x00CCEE },
-		transform: { position: new Planar.Point( 256, 64 ) },
+		transform: { position: { 256, 64 } },
 		motion: {},
 		material: {}
 	} );
@@ -26,7 +26,7 @@
 	platform.add( {
 		shape: { type: 'rectangle', width: 512, height: 64 },
 		draw: { fillColor: 0xFF0000 },
-		transform: { position: new Planar.Point( 256, 480 ) },
+		transform: { position: { 256, 480 } },
 		motion: { isStatic: true },
 		material: {}
 	} );

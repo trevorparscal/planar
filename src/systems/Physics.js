@@ -112,7 +112,7 @@ Planar.System.Physics = class extends Planar.System {
 			let body = this.bodies.get( entity.key );
 			entity.change( {
 				transform: {
-					position: new Planar.Point( body.position ),
+					position: { x: body.position.x, y: body.position.y },
 					rotation: body.angle
 				},
 				motion: {
@@ -120,7 +120,7 @@ Planar.System.Physics = class extends Planar.System {
 					mass: body.mass,
 					inertia: body.inertia,
 					linearSpeed: body.speed,
-					linearVelocity: new Planar.Point( body.velocity ),
+					linearVelocity: { x: body.velocity.x, y: body.velocity.y },
 					angularSpeed: body.angularSpeed,
 					angularVelocity: body.angularVelocity
 				}
@@ -187,7 +187,7 @@ function updateBody( entity, body ) {
 		}
 	} else {
 		for ( let i = 0, len = shape.points.length; i < len; i++ ) {
-			( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );	
+			( { x: vertices[i].x, y: vertices[i].y } = shape.points[i] );
 		}
 	}
 	Matter.Vertices.rotate( vertices, transform.rotation, transform.pivot );
