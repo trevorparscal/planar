@@ -17,6 +17,7 @@ Planar.System.Player = class extends Planar.System {
 			left: { x: -1, y: 0 },
 			right: { x: 1, y: 0 }
 		};
+		this.frame = 0;
 	}
 
 	/**
@@ -30,20 +31,35 @@ Planar.System.Player = class extends Planar.System {
 	 * @inheritdoc
 	 */
 	update( delta ) {
+		this.frame += delta / 100;
 		const move = ( motion ) => {
-			var factors = this.movement[this.dpad.direction];
+			var factors = this.movement[this.dpad.direction || 'up'];
 			if ( factors ) {
 				motion.force.x += factors.x * delta / 10000;
 				motion.force.y += factors.y * delta / 10000;
 			}
 		};
 		this.dpad.update();
+		/*jshint loopfunc: true */
 		for ( let entity of this.entities ) {
-			if ( this.dpad.pressed ) {
+			const { player } = entity.components,
+				direction = this.dpad.direction || player.direction || 'up',
+				walking = !!this.dpad.pressed.length;
+			if ( walking ) {
 				entity.change( { motion: move } );
-				entity.change( { player: { direction: this.dpad.direction } } );
 			}
-			entity.change( { player: { walking: this.dpad.pressed } } );
+			if ( walking || player.walking !== walking ) {
+				entity.change( { player: { walking: walking } } );
+			}
+			if ( player.direction !== direction ) {
+				entity.change( { player: { direction: direction } } );
+			}
+			entity.handle( 'player', ( player ) => {
+				const walkFrame = player.walking ? Math.floor( this.frame % 2 ) : 0;
+				entity.change( {
+					sprite: { texture: `link-${player.direction}-${walkFrame}` }
+				} );
+			} );
 		}
 	}
 };
