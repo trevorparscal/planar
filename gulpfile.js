@@ -93,7 +93,8 @@ gulp.task( 'build-intersection', function ( cb ) {
 	pump( [
 		gulp.src( 'demos/intersection/src/**/*.js' ),
 		order( [
-			'algorithms/**/*.js',
+			'Collision.js',
+			'Demo.js',
 			'main.js'
 		] ),
 		sourcemaps.init(),

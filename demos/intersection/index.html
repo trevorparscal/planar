@@ -1,0 +1,28 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Collision Demo</title>
+		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+				text-align: center;
+			}
+			canvas {
+				display: inline-block;
+				margin: 2em;
+				box-shadow: 0 0 1em #444;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="demo" width="512" height="512"></canvas>
+		<script src="../../lib/pixi.js"></script>
+		<script src="dist/intersection.js"></script>
+		<script type="text/javascript">
+			const cd = new CollisionDemo( 'demo' );
+		</script>
+	</body>
+</html>

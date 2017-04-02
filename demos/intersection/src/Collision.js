@@ -99,7 +99,7 @@ Collision.AABB = {
 		if ( py <= 0 ) {
 			return null;
 		}
-		hit = new Hit( aabb );
+		hit = new Collision.Hit( aabb );
 		if ( px < py ) {
 			sx = Math.sign( dx );
 			hit.delta.x = px * sx;
@@ -146,7 +146,7 @@ Collision.AABB = {
 		if ( nearTime >= 1 || farTime <= 0 ) {
 			return null;
 		}
-		hit = new Hit( aabb );
+		hit = new Collision.Hit( aabb );
 		hit.time = clamp( nearTime, 0, 1 );
 		if ( nearTimeX > nearTimeY ) {
 			hit.normal.x = -signX;
@@ -181,7 +181,7 @@ Collision.AABB = {
 		if ( py <= 0 ) {
 			return null;
 		}
-		hit = new Hit( aabb );
+		hit = new Collision.Hit( aabb );
 		if ( px < py ) {
 			sx = Math.sign( dx );
 			hit.delta.x = px * sx;
@@ -208,20 +208,20 @@ Collision.AABB = {
 	 */
 	sweepAABB: function ( aabb, box, delta ) {
 		var direction, sweep;
-		sweep = new Sweep();
+		sweep = new Collision.Sweep();
 		if ( delta.x === 0 && delta.y === 0 ) {
 			sweep.position.x = box.position.x;
 			sweep.position.y = box.position.y;
-			sweep.hit = AABB.intersectAABB( aabb, box );
+			sweep.hit = Collision.AABB.intersectAABB( aabb, box );
 			if ( sweep.hit !== null ) {
 				sweep.time = sweep.hit.time = 0;
 			} else {
 				sweep.time = 1;
 			}
 		} else {
-			sweep.hit = AABB.intersectSegment( aabb, box.position, delta, box.half );
+			sweep.hit = Collision.AABB.intersectSegment( aabb, box.position, delta, box.half );
 			if ( sweep.hit !== null ) {
-				sweep.time = clamp( sweep.hit.time - Math.EPSILON, 0, 1 );
+				sweep.time = clamp( sweep.hit.time - Number.EPSILON, 0, 1 );
 				sweep.position.x = box.position.x + delta.x * sweep.time;
 				sweep.position.y = box.position.y + delta.y * sweep.time;
 				direction = { x: delta.x, y: delta.y };
@@ -247,13 +247,13 @@ Collision.AABB = {
 	 */
 	sweepInto: function ( aabb, staticColliders, delta ) {
 		var collider, nearest, sweep;
-		nearest = new Sweep();
+		nearest = new Collision.Sweep();
 		nearest.time = 1;
 		nearest.position.x = aabb.position.x + delta.x;
 		nearest.position.y = aabb.position.y + delta.y;
 		for ( let i = 0, len = staticColliders.length; i < len; i++ ) {
 			collider = staticColliders[i];
-			sweep = collider.sweepAABB( aabb, delta );
+			sweep = Collision.sweepAABB( collider, aabb, delta );
 			if ( sweep.time < nearest.time ) {
 				nearest = sweep;
 			}
